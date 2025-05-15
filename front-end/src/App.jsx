@@ -1,13 +1,22 @@
-import React from 'react'
-import Navbar from './components/Navbar'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ProfilePage from './pages/ProfilePage';
+import EditProfile from './pages/EditProfile';
+
 const App = () => {
   return (
-    <div>
-      <Navbar/>
-      
-    </div>
-  )
-}
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path='/editprofile'element={<EditProfile/>}/>
+      </Routes>
+      <Footer />
+    </Router>
+  );
+};
 
-export default App
+export default App;
 
