@@ -1,51 +1,51 @@
-import { Box, Typography, Divider, Grid, Paper } from '@mui/material';
-import DocumentCard from '../components/DocumentCard';
+import { Box, Typography, Divider, Grid, Paper } from "@mui/material";
+import DocumentCard from "../components/DocumentCard";
 
 const sections = [
   {
-    title: 'Bills',
+    title: "Bills",
     documents: [
-      { title: 'Electricity Bill', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Water Bill', type: 'PDF', updated: '2025-03-10' },
+      { title: "Electricity Bill", type: "PDF", updated: "2025-03-10" },
+      { title: "Water Bill", type: "PDF", updated: "2025-03-10" },
     ],
   },
   {
-    title: 'Warranties',
+    title: "Warranties",
     documents: [
-      { title: 'Laptop Warranty', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Phone Warranty', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Phone Warranty', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Phone Warranty', type: 'PDF', updated: '2025-03-10' },
+      { title: "Laptop Warranty", type: "PDF", updated: "2025-03-10" },
+      { title: "Phone Warranty", type: "PDF", updated: "2025-03-10" },
+      { title: "Phone Warranty", type: "PDF", updated: "2025-03-10" },
+      { title: "Phone Warranty", type: "PDF", updated: "2025-03-10" },
     ],
   },
   {
-    title: 'Receipts',
+    title: "Receipts",
     documents: [
-      { title: 'Store Receipt', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Online Purchase Receipt', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Online Purchase Receipt', type: 'PDF', updated: '2025-03-10' },
+      { title: "Store Receipt", type: "PDF", updated: "2025-03-10" },
+      { title: "Online Purchase Receipt", type: "PDF", updated: "2025-03-10" },
+      { title: "Online Purchase Receipt", type: "PDF", updated: "2025-03-10" },
     ],
   },
   {
-    title: 'Insurance Documents',
+    title: "Insurance Documents",
     documents: [
-      { title: 'Health Insurance', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Car Insurance', type: 'PDF', updated: '2025-03-10' },
+      { title: "Health Insurance", type: "PDF", updated: "2025-03-10" },
+      { title: "Car Insurance", type: "PDF", updated: "2025-03-10" },
     ],
   },
   {
-    title: 'Invoices',
+    title: "Invoices",
     documents: [
-      { title: 'Electricity Bill', type: 'PDF', updated: '2025-03-10' },
-      { title: 'Water Bill', type: 'PDF', updated: '2025-03-10' },
+      { title: "Electricity Bill", type: "PDF", updated: "2025-03-10" },
+      { title: "Water Bill", type: "PDF", updated: "2025-03-10" },
     ],
   },
 ];
 
 const MyDocuments = () => {
   return (
-    <Box sx={{ width: '100%', py: 4, px: { xs: 2, sm: 4, md: 6 } }}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 3, width: '100%' }}>
+    <Box sx={{ py: 4, px: { xs: 2, sm: 4, md: 6 } }}>
+      <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
         <Typography variant="h4" fontWeight="bold" sx={{ mb: 4 }}>
           📑 My Documents
         </Typography>
