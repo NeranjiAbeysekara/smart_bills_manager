@@ -150,9 +150,8 @@ const SignUp = () => {
                 </InputAdornment>
               )
             }}
+
           />
-          
-          
           
           <Button
         style={{ 
