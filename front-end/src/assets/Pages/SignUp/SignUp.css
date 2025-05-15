@@ -1,0 +1,115 @@
+/* SignUp.css */
+.S-MainContainer {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.S-LeftContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.S-RightContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    background-color: #87C1B3;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.SignupForm {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+   
+    border-radius: 20px;
+    background-color:#effdf4;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.Signup {
+    margin-bottom: 0.05em;
+    text-align: center;
+    color: #1c1b1b;
+    font-size: 2em;
+}
+
+.SignupInnerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.signup-input {
+    margin-bottom: 1rem;
+}
+
+/*.signup-button {
+    margin-top: 1rem;
+    padding: 12px;
+    background-color:#2D5852;
+    color: white;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+} */
+
+.signup-button:hover {
+    background-color: #067c0a;
+
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 1rem;
+    color: #666;
+}
+
+.login-link a {
+    color: #035723;
+    text-decoration: none;
+    transition: text-decoration 0.3s ease;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.SystemImage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    margin-bottom: 3em;
+}
+
+.mainSignTitle {
+    font-weight: bold;
+    font-size: 3.5em;
+    color: rgb(4, 100, 42);
+    margin-top: 1em;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .S-MainContainer {
+        flex-direction: column;
+    }
+    
+    .S-LeftContainer,
+    .S-RightContainer {
+        width: 100%;
+        height: auto;
+    }
+}
