@@ -1,5 +1,6 @@
 import { Box, Typography, Divider, Grid, Paper } from "@mui/material";
 import DocumentCard from "../components/DocumentCard";
+import { Link } from "react-router-dom";
 
 const sections = [
   {
@@ -52,9 +53,24 @@ const MyDocuments = () => {
 
         {sections.map((section, index) => (
           <Box key={index} sx={{ mb: 5 }}>
-            <Typography variant="h6" color="primary" fontWeight="bold">
-              {section.title}
-            </Typography>
+            {/* If the section is "Bills", make it a clickable link */}
+            {section.title === "Bills" ? (
+              <Typography
+                variant="h6"
+                color="primary"
+                fontWeight="bold"
+                component={Link}
+                to="/bills"
+                sx={{ textDecoration: "none", cursor: "pointer" }}
+              >
+                {section.title}
+              </Typography>
+            ) : (
+              <Typography variant="h6" color="primary" fontWeight="bold">
+                {section.title}
+              </Typography>
+            )}
+
             <Divider sx={{ my: 2 }} />
             <Grid container spacing={2}>
               {section.documents.map((doc, i) => (

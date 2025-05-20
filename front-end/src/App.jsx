@@ -7,6 +7,7 @@ import EditProfile from "./pages/EditProfile";
 import MyDocuments from "./pages/MyDocuments";
 import EditDocument from "./components/EditDocument";
 import DocumentDetails from "./pages/DocumentDetails";
+import Bills from "./pages/Bills";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/editprofile" element={<EditProfile />} />
         <Route path="/document-details" element={<DocumentDetails />} />
+        <Route path="/bills" element={<Bills />} />
       </Routes>
       <Footer />
     </Router>
