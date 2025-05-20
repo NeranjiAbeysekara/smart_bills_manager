@@ -1,3 +1,4 @@
+// src/pages/EditDocument.jsx
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -25,12 +26,14 @@ export default function EditDocument() {
 
   useEffect(() => {
     if (location.state) {
-      setFormData((prev) => ({
-        ...prev,
-        itemName: location.state.title || '',
-        documentType: location.state.type || '',
+      setFormData({
+        itemName: location.state.item || location.state.title || '',
+        storeName: location.state.store || '',
         purchaseDate: location.state.updated || '',
-      }));
+        warrantyPeriod: location.state.warrantyPeriod || '',
+        documentType: location.state.type || '',
+        file: null,
+      });
     }
   }, [location.state]);
 
@@ -44,6 +47,7 @@ export default function EditDocument() {
 
   const handleSubmit = () => {
     console.log('Saving:', formData);
+    // Add save logic here
   };
 
   return (
