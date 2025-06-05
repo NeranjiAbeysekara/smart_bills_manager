@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Link,
-  IconButton,
-  Divider,
-} from "@mui/material";
+import { Box, Container, Grid, Typography, Link, IconButton } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -18,8 +10,8 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#f0f0f0", // Light gray background
-        color: "#333",              // Dark text for contrast
+        bgcolor: "#3949ab",
+        color: "white",
         py: 6,
         mt: 8,
       }}
@@ -27,88 +19,78 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="space-between">
           {/* About Section */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Grid item xs={12} md={4}>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
               Smart Receipt Manager
             </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Manage all your receipts, warranties, and documents in one
-              secure place.
+            <Typography variant="body2" sx={{ maxWidth: 320 }}>
+              Manage your receipts, warranties, and bills all in one place. Stay organized and stress-free!
             </Typography>
           </Grid>
 
           {/* Quick Links */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Grid item xs={6} md={2}>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
               Quick Links
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
               <Link href="/" color="inherit" underline="hover">
                 Home
               </Link>
-              <Link href="/documents" color="inherit" underline="hover">
-                Documents
+              <Link href="/receipts" color="inherit" underline="hover">
+                Receipts
               </Link>
-              <Link href="/upload" color="inherit" underline="hover">
-                Upload
+              <Link href="/bills" color="inherit" underline="hover">
+                Bills
               </Link>
-              <Link href="/profile" color="inherit" underline="hover">
-                Profile
+              <Link href="/warranty" color="inherit" underline="hover">
+                Warranty
+              </Link>
+              <Link href="/contact" color="inherit" underline="hover">
+                Contact Us
               </Link>
             </Box>
           </Grid>
 
-          {/* Contact Info */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom fontWeight="bold">
-              Contact Us
-            </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Email: support@smartreceipt.com
-            </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Phone: +1 (555) 123-4567
-            </Typography>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Address: 123 Receipt St, Tech City
-            </Typography>
-          </Grid>
-
           {/* Social Media */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom fontWeight="bold">
+          <Grid item xs={6} md={3}>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
               Follow Us
             </Typography>
             <Box>
               <IconButton
-                aria-label="Facebook"
+                aria-label="facebook"
                 href="https://facebook.com"
                 target="_blank"
-                sx={{ color: "#333" }}
+                rel="noopener"
+                sx={{ color: "white" }}
               >
                 <FacebookIcon />
               </IconButton>
               <IconButton
-                aria-label="Twitter"
+                aria-label="twitter"
                 href="https://twitter.com"
                 target="_blank"
-                sx={{ color: "#333" }}
+                rel="noopener"
+                sx={{ color: "white" }}
               >
                 <TwitterIcon />
               </IconButton>
               <IconButton
-                aria-label="Instagram"
+                aria-label="instagram"
                 href="https://instagram.com"
                 target="_blank"
-                sx={{ color: "#333" }}
+                rel="noopener"
+                sx={{ color: "white" }}
               >
                 <InstagramIcon />
               </IconButton>
               <IconButton
-                aria-label="LinkedIn"
+                aria-label="linkedin"
                 href="https://linkedin.com"
                 target="_blank"
-                sx={{ color: "#333" }}
+                rel="noopener"
+                sx={{ color: "white" }}
               >
                 <LinkedInIcon />
               </IconButton>
@@ -116,19 +98,16 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: 4, backgroundColor: "rgba(0,0,0,0.1)" }} />
-
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ opacity: 0.6, fontSize: "0.9rem" }}
-        >
+        <Box textAlign="center" pt={4} fontSize={14} color="rgba(255,255,255,0.7)">
           © {new Date().getFullYear()} Smart Receipt Manager. All rights reserved.
-        </Typography>
+        </Box>
       </Container>
     </Box>
   );
 };
 
 export default Footer;
+
+
+
 
