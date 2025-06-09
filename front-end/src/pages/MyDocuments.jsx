@@ -1,149 +1,96 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  IconButton,
-  Divider,
-} from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import DeleteIcon from "@mui/icons-material/Delete";
-import GetAppIcon from "@mui/icons-material/GetApp";
+import { Box, Typography, Grid, Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-const dummyDocuments = [
-  {
-    id: 1,
-    name: "Samsung TV Receipt",
-    category: "Electronics",
-    uploadedAt: "2025-05-20",
-    expiry: "2026-05-20",
-  },
-  {
-    id: 2,
-    name: "Nike Shoes Receipt",
-    category: "Fashion",
-    uploadedAt: "2025-04-10",
-    expiry: "2025-10-10",
-  },
-  {
-    id: 3,
-    name: "Cargills Life Insurance",
-    category: "Insurance",
-    uploadedAt: "2025-02-01",
-    expiry: "2026-02-01",
-  },
-  {
-    id: 4,
-    name: "Washing Machine Invoice",
-    category: "Appliances",
-    uploadedAt: "2025-01-15",
-    expiry: "2026-01-15",
-  },
-  {
-    id: 5,
-    name: "Electricity Bill",
-    category: "Utilities",
-    uploadedAt: "2025-05-01",
-    expiry: "2025-06-01",
-  },
+const categories = [
+  { name: "Receipts", emoji: "🧾" },
+  { name: "Bills", emoji: "💸" },
+  { name: "Warranty", emoji: "🛠️" },
+  { name: "Insurance", emoji: "🛡️" },
+  { name: "Travel", emoji: "✈️" },
+  { name: "Tax Documents", emoji: "📊" },
+  { name: "Memos", emoji: "📝" },
+  { name: "Contracts", emoji: "📃" },
+  { name: "Others", emoji: "📁" },
 ];
 
 const MyDocuments = () => {
-  const [search, setSearch] = React.useState("");
+  const navigate = useNavigate();
 
-  const filteredDocs = dummyDocuments.filter((doc) =>
-    doc.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const groupedByCategory = filteredDocs.reduce((acc, doc) => {
-    if (!acc[doc.category]) {
-      acc[doc.category] = [];
-    }
-    acc[doc.category].push(doc);
-    return acc;
-  }, {});
+  const handleCategoryClick = (name) => {
+    const path = `/${name.toLowerCase().replace(/\s/g, "")}`;
+    navigate(path);
+  };
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        My Documents
+    <Box sx={{ minHeight: "80vh", pt: 10, px: 4, backgroundColor: "#f5f7fa" }}>
+      <Typography
+        variant="h4"
+        textAlign="center"
+        fontWeight={700}
+        mb={6}
+        color="#3949ab"
+        letterSpacing={1}
+      >
+        📂 My Documents
       </Typography>
 
-      <TextField
-        label="Search documents"
-        variant="outlined"
-        fullWidth
-        sx={{ mb: 4 }}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
-      {Object.keys(groupedByCategory).length === 0 && (
-        <Typography>No documents found.</Typography>
-      )}
-
-      {Object.entries(groupedByCategory).map(([category, docs]) => (
-        <Box key={category} sx={{ mb: 5 }}>
-          <Typography
-            variant="h6"
-            sx={{
-              mb: 2,
-              fontWeight: "bold",
-              color: "#5a4d41",
-              backgroundColor: "#fff5e1",
-              p: 1.5,
-              borderRadius: 2,
-            }}
+      <Grid
+        container
+        spacing={4}
+        justifyContent="center"
+        alignItems="center"
+        sx={{ mt: 2 }}
+      >
+        {categories.map(({ name, emoji }) => (
+          <Grid
+            item
+            key={name}
+            xs={12}
+            sm={6}
+            md={3}
+            sx={{ display: "flex", justifyContent: "center" }}
           >
-            {category}
-          </Typography>
-          <Grid container spacing={3}>
-            {docs.map((doc) => (
-              <Grid item xs={12} sm={6} md={4} key={doc.id}>
-                <Card
-                  sx={{
-                    backgroundColor: "#fffaf1",
-                    borderRadius: 3,
-                    boxShadow: 2,
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="h6" fontWeight="bold">
-                      {doc.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Uploaded: {doc.uploadedAt}
-                    </Typography>
-                    <Typography variant="body2" color="error">
-                      Expiry: {doc.expiry}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <IconButton color="primary" title="View">
-                      <VisibilityIcon />
-                    </IconButton>
-                    <IconButton color="success" title="Download">
-                      <GetAppIcon />
-                    </IconButton>
-                    <IconButton color="error" title="Delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
+            <Paper
+              elevation={6}
+              sx={{
+                width: 180,
+                height: 180,
+                borderRadius: 4,
+                bgcolor: "white",
+                textAlign: "center",
+                cursor: "pointer",
+                px: 2,
+                py: 3,
+                transition: "transform 0.25s ease, box-shadow 0.25s ease",
+                "&:hover": {
+                  transform: "translateY(-10px)",
+                  boxShadow:
+                    "0 8px 20px rgba(57, 73, 171, 0.3), 0 4px 12px rgba(57, 73, 171, 0.15)",
+                },
+              }}
+              onClick={() => handleCategoryClick(name)}
+            >
+              <Typography
+                variant="h1"
+                sx={{ fontSize: 56, mb: 2, userSelect: "none" }}
+              >
+                {emoji}
+              </Typography>
+              <Typography
+                variant="h6"
+                fontWeight={600}
+                color="#3949ab"
+                sx={{ userSelect: "none" }}
+              >
+                {name}
+              </Typography>
+            </Paper>
           </Grid>
-        </Box>
-      ))}
+        ))}
+      </Grid>
     </Box>
   );
 };
 
 export default MyDocuments;
-
-

@@ -1,173 +1,106 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import ShieldIcon from "@mui/icons-material/Shield";
-import InsightsIcon from "@mui/icons-material/Insights";
-import WatchLaterIcon from "@mui/icons-material/WatchLater";
+import { Box, Typography, Button, Grid, Paper, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+const features = [
+  { emoji: "📤", title: "Upload Receipts", desc: "Easily upload your receipts, invoices, and warranty cards." },
+  { emoji: "📂", title: "Smart Categories", desc: "Organize documents by Bills, Insurance, Warranty & more." },
+  { emoji: "🔍", title: "Search & Filter", desc: "Find any document instantly with keywords or filters." },
+  { emoji: "☁️", title: "Secure Cloud Storage", desc: "Access your documents securely anytime, anywhere." },
+];
 
 const HomePage = () => {
+  const navigate = useNavigate(); // <-- add this
+
   return (
-    <Box sx={{ backgroundColor: "#1e1e2f", minHeight: "100vh", color: "#fff" }}>
-      {/* Hero Section */}
-      <Box
-        sx={{
-          py: 10,
-          background: "linear-gradient(to right, #22223b, #3a3a5a)",
-        }}
-      >
-        <Container maxWidth="md" sx={{ textAlign: "center" }}>
-          <Typography variant="h2" fontWeight="bold" gutterBottom>
-            Smart Receipt Manager
-          </Typography>
-          <Typography variant="h6" color="gray" sx={{ mb: 4 }}>
-            All your receipts. Organized. Secure. Effortless.
-          </Typography>
-          <Button
-            variant="contained"
-            component={Link}
-            to="/upload"
-            sx={{
-              backgroundColor: "#f4a261",
-              color: "#1e1e2f",
-              px: 4,
-              py: 1.5,
-              borderRadius: 8,
-              fontWeight: "bold",
-              "&:hover": {
-                backgroundColor: "#e76f51",
-              },
-            }}
-          >
-            Upload a Receipt
-          </Button>
-        </Container>
-      </Box>
-
-      {/* Features */}
-      <Container sx={{ py: 10 }}>
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
-              sx={{
-                backgroundColor: "#2a2a3d",
-                color: "#fff",
-                borderRadius: 4,
-                height: "100%",
-              }}
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f5f7fa", pt: 10, pb: 12 }}>
+      <Container maxWidth="lg">
+        {/* Hero Section */}
+        <Grid container spacing={6} alignItems="center" justifyContent="center">
+          <Grid item xs={12} md={6} textAlign="center">
+            <Typography variant="h3" fontWeight={700} color="#3949ab" gutterBottom>
+              Smart Receipt Manager 📲
+            </Typography>
+            <Typography variant="h6" color="text.secondary" mb={4}>
+              Organize, categorize, and manage your receipts easily and securely.
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ backgroundColor: "#3949ab", px: 6, py: 1.8, fontWeight: 600 }}
+              onClick={() => navigate("/signup")} // <-- fixed navigation here
             >
-              <CardContent sx={{ textAlign: "center" }}>
-                <ReceiptLongIcon sx={{ fontSize: 40, color: "#f4a261" }} />
-                <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
-                  Centralized Receipts
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  Store and manage all your digital receipts in one secure place.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
-              sx={{
-                backgroundColor: "#2a2a3d",
-                color: "#fff",
-                borderRadius: 4,
-                height: "100%",
-              }}
-            >
-              <CardContent sx={{ textAlign: "center" }}>
-                <ShieldIcon sx={{ fontSize: 40, color: "#f4a261" }} />
-                <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
-                  Encrypted & Safe
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  Every document is encrypted and only accessible to you.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
-              sx={{
-                backgroundColor: "#2a2a3d",
-                color: "#fff",
-                borderRadius: 4,
-                height: "100%",
-              }}
-            >
-              <CardContent sx={{ textAlign: "center" }}>
-                <WatchLaterIcon sx={{ fontSize: 40, color: "#f4a261" }} />
-                <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
-                  Warranty Reminders
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  Get alerts before your product warranties expire.
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
-              sx={{
-                backgroundColor: "#2a2a3d",
-                color: "#fff",
-                borderRadius: 4,
-                height: "100%",
-              }}
-            >
-              <CardContent sx={{ textAlign: "center" }}>
-                <InsightsIcon sx={{ fontSize: 40, color: "#f4a261" }} />
-                <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
-                  Track Spending
-                </Typography>
-                <Typography variant="body2" color="gray">
-                  View analytics and insights from your receipt history.
-                </Typography>
-              </CardContent>
-            </Card>
+              Get Started
+            </Button>
           </Grid>
         </Grid>
-      </Container>
 
-      {/* Final CTA */}
-      <Box sx={{ py: 6, textAlign: "center", backgroundColor: "#14141f" }}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom>
-          Take control of your receipts today.
-        </Typography>
-        <Button
-          variant="outlined"
-          component={Link}
-          to="/documents"
-          sx={{
-            borderColor: "#f4a261",
-            color: "#f4a261",
-            px: 4,
-            py: 1.2,
-            borderRadius: 6,
-            "&:hover": {
-              backgroundColor: "#f4a261",
-              color: "#1e1e2f",
-            },
-          }}
-        >
-          Go to My Documents
-        </Button>
-      </Box>
+        {/* Features Section */}
+        <Box sx={{ mt: 12 }}>
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            color="#3949ab"
+            textAlign="center"
+            gutterBottom
+          >
+            What You Can Do ✨
+          </Typography>
+
+          <Grid container spacing={5} justifyContent="center" mt={4}>
+            {features.map(({ emoji, title, desc }) => (
+              <Grid
+                item
+                key={title}
+                xs={12}
+                sm={6}
+                md={3}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <Paper
+                  elevation={6}
+                  sx={{
+                    width: 220,
+                    height: 220,
+                    borderRadius: 4,
+                    bgcolor: "white",
+                    textAlign: "center",
+                    px: 3,
+                    py: 4,
+                    cursor: "default",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-12px)",
+                      boxShadow:
+                        "0 10px 30px rgba(57, 73, 171, 0.3), 0 6px 20px rgba(57, 73, 171, 0.15)",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="h1"
+                    sx={{ fontSize: 60, mb: 2, userSelect: "none" }}
+                  >
+                    {emoji}
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                    color="#3949ab"
+                    gutterBottom
+                  >
+                    {title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                    {desc}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </Container>
     </Box>
   );
 };
 
 export default HomePage;
-

@@ -1,243 +1,178 @@
 import React, { useState } from "react";
 import {
   Box,
+  Typography,
   Button,
   Container,
-  Grid,
-  TextField,
-  Typography,
-  MenuItem,
   Paper,
-  Alert,
+  Input,
+  LinearProgress,
+  TextField,
+  MenuItem,
 } from "@mui/material";
 
+const categories = [
+  "Warranty",
+  "Receipt",
+  "Bill",
+  "Insurance",
+  "Bank Statement",
+  "Tax Document",
+  "Other",
+];
+
 const UploadPage = () => {
-  const [formData, setFormData] = useState({
-    itemName: "",
-    storeName: "",
-    purchaseDate: "",
-    warrantyPeriod: "",
-    documentType: "",
-    file: null,
-  });
-  const [errors, setErrors] = useState({
-    itemName: "",
-    purchaseDate: "",
-    documentType: "",
-    file: "",
-    warrantyPeriod: "",
-  });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
 
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = {
-      itemName: "",
-      purchaseDate: "",
-      documentType: "",
-      file: "",
-      warrantyPeriod: "",
-    };
-
-    if (!formData.itemName.trim()) {
-      newErrors.itemName = "Item Name is required";
-      isValid = false;
-    }
-    if (!formData.purchaseDate) {
-      newErrors.purchaseDate = "Purchase Date is required";
-      isValid = false;
-    }
-    if (!formData.documentType) {
-      newErrors.documentType = "Document Type is required";
-      isValid = false;
-    }
-    if (!formData.file) {
-      newErrors.file = "Please select a file";
-      isValid = false;
-    }
-    if (formData.warrantyPeriod && (isNaN(formData.warrantyPeriod) || formData.warrantyPeriod <= 0)) {
-      newErrors.warrantyPeriod = "Warranty Period must be a positive number";
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "file") {
-      setFormData({ ...formData, file: files[0] });
-      setErrors({ ...errors, file: files[0] ? "" : "Please select a file" });
-    } else {
-      setFormData({ ...formData, [name]: value });
-      setErrors({ ...errors, [name]: "" });
+  const handleFileChange = (e) => {
+    if (e.target.files.length > 0) {
+      setFileName(e.target.files[0].name);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccessMessage("");
-    setErrorMessage("");
+  const handleUpload = () => {
+    if (!fileName) return alert("Please select a file first! 📁");
+    if (!category) return alert("Please select a category! 📂");
+    if (!title.trim()) return alert("Please enter a document title! 📝");
+    if (!date) return alert("Please select the document date! 📅");
 
-    if (!validateForm()) {
-      return;
-    }
+    setUploading(true);
+    setProgress(0);
 
-    const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
-
-    try {
-      const response = await fetch('http://localhost:5000/api/upload', {
-        method: 'POST',
-        body: data,
+    // Fake upload progress simulation
+    const interval = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          clearInterval(interval);
+          setUploading(false);
+          setFileName("");
+          setCategory("");
+          setTitle("");
+          setDate("");
+          alert("Upload Successful! 🎉");
+          return 100;
+        }
+        return Math.min(oldProgress + 10, 100);
       });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
-      const result = await response.json();
-      console.log('Upload successful:', result);
-      setSuccessMessage("Upload successful!");
-      setFormData({
-        itemName: "",
-        storeName: "",
-        purchaseDate: "",
-        warrantyPeriod: "",
-        documentType: "",
-        file: null,
-      });
-      setTimeout(() => setSuccessMessage(""), 3000); // Hide alert after 3 seconds
-    } catch (error) {
-      console.error('Upload error:', error);
-      setErrorMessage("Upload failed. Please try again.");
-      setTimeout(() => setErrorMessage(""), 3000); // Hide error after 3 seconds
-    }
+    }, 300);
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ padding: 4, marginTop: 6 }}>
-        <Typography variant="h5" gutterBottom>
-          📤 Upload Receipt / Warranty
-        </Typography>
-        {successMessage && (
-          <Alert severity="success" sx={{ mb: 2 }}>
-            {successMessage}
-          </Alert>
-        )}
-        {errorMessage && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {errorMessage}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                name="itemName"
-                label="Item Name"
-                fullWidth
-                required
-                value={formData.itemName}
-                onChange={handleChange}
-                error={!!errors.itemName}
-                helperText={errors.itemName}
+    <Box sx={{ bgcolor: "#f5f7fa", minHeight: "90vh", py: 8 }}>
+      <Container maxWidth="sm">
+        <Paper
+          elevation={6}
+          sx={{
+            p: 5,
+            borderRadius: 4,
+            textAlign: "center",
+            bgcolor: "white",
+            boxShadow:
+              "0 8px 20px rgba(57, 73, 171, 0.1), 0 4px 10px rgba(57, 73, 171, 0.05)",
+          }}
+        >
+          <Typography variant="h4" fontWeight={700} color="#3949ab" mb={3}>
+            Upload Your Document 📤
+          </Typography>
+
+          {/* Document Title */}
+          <TextField
+            fullWidth
+            label="Document Title 📝"
+            variant="outlined"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          {/* Category Select */}
+          <TextField
+            select
+            fullWidth
+            label="Select Category 📂"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            helperText="Please select the document category"
+            sx={{ mb: 3 }}
+          >
+            {categories.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          {/* Date Picker */}
+          <TextField
+            fullWidth
+            label="Document Date 📅"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          {/* File Upload */}
+          <Button
+            variant="outlined"
+            component="label"
+            sx={{
+              borderColor: "#3949ab",
+              color: "#3949ab",
+              fontWeight: 600,
+              px: 5,
+              py: 1.5,
+              mb: 2,
+              "&:hover": { borderColor: "#283593", backgroundColor: "#e8eaf6" },
+            }}
+          >
+            Choose File
+            <Input
+              type="file"
+              onChange={handleFileChange}
+              sx={{ display: "none" }}
+            />
+          </Button>
+
+          <Typography variant="body1" color="text.secondary" mb={3}>
+            {fileName || "No file chosen yet..."}
+          </Typography>
+
+          {/* Upload Button */}
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!fileName || uploading}
+            onClick={handleUpload}
+            sx={{ px: 6, py: 1.8, fontWeight: 700 }}
+          >
+            {uploading ? "Uploading..." : "Upload"}
+          </Button>
+
+          {/* Progress Bar */}
+          {uploading && (
+            <Box sx={{ width: "100%", mt: 4 }}>
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+                sx={{ height: 10, borderRadius: 5 }}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="storeName"
-                label="Store Name"
-                fullWidth
-                value={formData.storeName}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="purchaseDate"
-                label="Purchase Date"
-                type="date"
-                fullWidth
-                required
-                InputLabelProps={{ shrink: true }}
-                value={formData.purchaseDate}
-                onChange={handleChange}
-                error={!!errors.purchaseDate}
-                helperText={errors.purchaseDate}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="warrantyPeriod"
-                label="Warranty Period (in months)"
-                type="number"
-                fullWidth
-                value={formData.warrantyPeriod}
-                onChange={handleChange}
-                error={!!errors.warrantyPeriod}
-                helperText={errors.warrantyPeriod}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="documentType"
-                label="Document Type"
-                select
-                fullWidth
-                required
-                value={formData.documentType}
-                onChange={handleChange}
-                error={!!errors.documentType}
-                helperText={errors.documentType}
-              >
-                <MenuItem value="receipt">Receipt</MenuItem>
-                <MenuItem value="warranty">Warranty Card</MenuItem>
-                <MenuItem value="invoice">Invoice</MenuItem>
-              </TextField>
-            </Grid>
-            <Grid item xs={12}>
-              <Button variant="outlined" component="label" fullWidth>
-                Upload File
-                <input
-                  type="file"
-                  hidden
-                  name="file"
-                  onChange={handleChange}
-                  accept=".jpg,.png,.pdf"
-                />
-              </Button>
-              {formData.file && (
-                <Typography variant="body2" sx={{ mt: 1 }}>
-                  Selected: {formData.file.name}
-                </Typography>
-              )}
-              {errors.file && (
-                <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-                  {errors.file}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                sx={{ mt: 2 }}
-              >
-                Submit
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Paper>
-    </Container>
+              <Typography variant="body2" color="text.secondary" mt={1}>
+                {progress}% completed
+              </Typography>
+            </Box>
+          )}
+        </Paper>
+      </Container>
+    </Box>
   );
 };
 
 export default UploadPage;
+
