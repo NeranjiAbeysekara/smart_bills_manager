@@ -1,4 +1,5 @@
-import React from "react";
+// frontend/pages/SignupPage.jsx
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,11 +9,38 @@ import {
   Paper,
   Link,
 } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import AuthSocialButtons from "../components/AuthSocialButtons";
 
 const SignupPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const handleGoogleSignup = () => {
     alert("Google signup clicked — integrate Firebase or OAuth2 here.");
+  };
+
+  const handleSignup = async () => {
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/signup", {
+        name,
+        email,
+        password,
+      });
+
+      const { token } = res.data;
+
+      localStorage.setItem("token", token);
+
+      alert("Registration successful! 🎉");
+      navigate("/upload");
+    } catch (err) {
+      console.error("Registration failed:", err);
+      alert(err.response?.data?.message || "Registration failed ❌");
+    }
   };
 
   return (
@@ -29,14 +57,38 @@ const SignupPage = () => {
         </Typography>
 
         <AuthSocialButtons onGoogleClick={handleGoogleSignup} />
-
         <Divider sx={{ my: 3 }}>or</Divider>
 
-        <TextField label="Full Name" fullWidth margin="normal" />
-        <TextField label="Email" fullWidth margin="normal" />
-        <TextField label="Password" type="password" fullWidth margin="normal" />
+        <TextField
+          label="Full Name"
+          fullWidth
+          margin="normal"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          label="Email"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={handleSignup}
+        >
           Sign Up
         </Button>
 

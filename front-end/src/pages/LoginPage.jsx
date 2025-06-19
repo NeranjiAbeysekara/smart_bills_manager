@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,11 +8,37 @@ import {
   Paper,
   Link,
 } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import AuthSocialButtons from "../components/AuthSocialButtons";
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
   const handleGoogleLogin = () => {
     alert("Google login clicked — integrate Firebase or OAuth2 here.");
+  };
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      const { token } = res.data;
+
+      // Store token in localStorage
+      localStorage.setItem("token", token);
+
+      alert("Login successful! 🎉");
+      navigate("/upload");
+    } catch (err) {
+      console.error("Login failed:", err);
+      alert(err.response?.data?.message || "Login failed ❌");
+    }
   };
 
   return (
@@ -32,10 +58,29 @@ const LoginPage = () => {
 
         <Divider sx={{ my: 3 }}>or</Divider>
 
-        <TextField label="Email" fullWidth margin="normal" />
-        <TextField label="Password" type="password" fullWidth margin="normal" />
+        <TextField
+          label="Email"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-        <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={handleLogin}
+        >
           Login
         </Button>
 
