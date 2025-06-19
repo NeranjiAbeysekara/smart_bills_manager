@@ -11,21 +11,29 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const DocumentDetailsPage = () => {
-  const { id } = useParams(); // document ID from URL
+  const { id } = useParams();
   const [document, setDocument] = useState(null);
 
   useEffect(() => {
-    // Fetch document data by ID
-    const fetchDocument = async () => {
-      try {
-        const res = await axios.get(`/api/documents/${id}`);
-        setDocument(res.data);
-      } catch (err) {
-        console.error("Error fetching document:", err);
+  const fetchDocument = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found. Please log in.");
       }
-    };
-    fetchDocument();
-  }, [id]);
+
+      const res = await axios.get(`http://localhost:5000/api/documents/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setDocument(res.data);
+    } catch (err) {
+      console.error("Error fetching document:", err);
+      alert("Failed to load document details.");
+    }
+  };
+  fetchDocument();
+}, [id]);
+
 
   if (!document) return <Typography>Loading...</Typography>;
 

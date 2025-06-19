@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Grid, Paper, Dialog, DialogTitle, DialogContent } from "@mui/material";
 import axios from "axios";
+import { Link } from "react-router-dom"; // ✅ Import Link
 
 const categories = [
   { name: "Receipt", emoji: "🧾" },
@@ -23,7 +24,6 @@ const MyDocuments = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(`http://localhost:5000/api/documents/type/${type}`, {
-
         headers: { Authorization: `Bearer ${token}` },
       });
       setDocuments(res.data);
@@ -35,10 +35,9 @@ const MyDocuments = () => {
   };
 
   const handleCategoryClick = (name) => {
-  setSelectedCategory(name);
-  fetchDocumentsByType(name); // directly pass name
-};
-
+    setSelectedCategory(name);
+    fetchDocumentsByType(name);
+  };
 
   return (
     <Box sx={{ minHeight: "80vh", pt: 10, px: 4, backgroundColor: "#f5f7fa" }}>
@@ -94,9 +93,13 @@ const MyDocuments = () => {
           {documents.length > 0 ? (
             documents.map((doc) => (
               <Box key={doc._id} mb={2} p={2} border="1px solid #ddd" borderRadius={2}>
-                <Typography variant="subtitle1" fontWeight={600}>{doc.itemName}</Typography>
+                <Typography variant="subtitle1" fontWeight={600}>
+                  {doc.itemName}
+                </Typography>
                 <Typography variant="body2">Date: {doc.purchaseDate}</Typography>
-                <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer">🔗 View File</a>
+                <Link to={`/documents/${doc._id}`} style={{ textDecoration: "none", color: "#3949ab" }}>
+                  🔍 View Details
+                </Link>
               </Box>
             ))
           ) : (

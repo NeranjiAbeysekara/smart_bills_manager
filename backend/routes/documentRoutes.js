@@ -3,6 +3,7 @@ import {
   uploadDocument,
   getAllDocuments,
   getDocumentsByType,
+  getDocumentById,
   updateDocument,
   deleteDocument
 } from '../controllers/documentController.js';
@@ -19,6 +20,9 @@ router.get('/', protect, getAllDocuments);
 
 // Get documents by type (e.g., /api/documents/type/bill)
 router.get('/type/:type', protect, getDocumentsByType);
+
+// Get a document by ID
+router.get('/:id', protect, getDocumentById);
 
 // Update a document by ID
 router.put('/:id', protect, updateDocument);

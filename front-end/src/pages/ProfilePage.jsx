@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -8,42 +8,65 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import axios from "axios";
 
 const ProfilePage = () => {
-  const [user, setUser] = useState({
-    name: "Jane Doe",
-    email: "janedoe@example.com",
-    phone: "+1 234 567 890",
-    address: "123 Main Street, City, Country",
-    bio: "I love managing receipts and staying organized! 📦✨",
-    avatarUrl: "/profile.jpg",
-  });
-
+  const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState({ ...user });
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:5000/api/user/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(res.data);
+        setFormData(res.data);
+      } catch (err) {
+        console.error("Failed to fetch profile", err);
+        alert("Error fetching user profile");
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleEditToggle = () => {
-    if (editMode) {
-      setUser({ ...formData });
+  const handleEditToggle = async () => {
+  if (editMode) {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.put(
+        "http://localhost:5000/api/user/edit", // ✅ Corrected endpoint
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setUser(res.data);
+      alert("Profile updated successfully!");
+    } catch (err) {
+      alert("Update failed");
+      console.error(err);
     }
-    setEditMode(!editMode);
-  };
+  }
+  setEditMode(!editMode);
+};
+
+  if (!user) return <Typography>Loading profile...</Typography>;
 
   return (
     <Container maxWidth="sm" sx={{ mt: 10, mb: 10 }}>
-      <Paper
-        elevation={6}
-        sx={{
-          p: 6,
-          borderRadius: 4,
-          bgcolor: "#fafafa",
-          boxShadow: "0 8px 20px rgba(57, 73, 171, 0.15)",
-        }}
-      >
+      <Paper elevation={6} sx={{ p: 6, borderRadius: 4, bgcolor: "#fafafa" }}>
         <Box sx={{ display: "flex", justifyContent: "center", mb: 5 }}>
           <Avatar
             src={user.avatarUrl}
@@ -67,13 +90,11 @@ const ProfilePage = () => {
             <TextField
               fullWidth
               name="name"
-              value={formData.name}
+              value={formData.name || ""}
               onChange={handleChange}
               label="👩‍💼 Name"
               variant="outlined"
-              size="medium"
               sx={{ mb: 3 }}
-              autoFocus
             />
           ) : (
             <>👩‍💼 {user.name}</>
@@ -81,29 +102,26 @@ const ProfilePage = () => {
         </Typography>
 
         {[
-          { label: "📧 Email", name: "email", type: "email" },
-          { label: "📱 Phone Number", name: "phone", type: "tel" },
+          { label: "📧 Email", name: "email", type: "email", readOnly: true },
+          { label: "📱 Phone Number", name: "phone" },
           { label: "🏠 Address", name: "address", multiline: true, rows: 2 },
           { label: "📝 Bio", name: "bio", multiline: true, rows: 3 },
-        ].map(({ label, name, type, multiline, rows }) => (
+        ].map(({ label, name, type, readOnly, multiline, rows }) => (
           <Box key={name} sx={{ mb: 3 }}>
             <Typography
               variant="subtitle1"
               color="text.secondary"
-              gutterBottom
               sx={{ fontWeight: 600 }}
             >
               {label}
             </Typography>
-            {editMode ? (
+            {editMode && !readOnly ? (
               <TextField
                 fullWidth
                 name={name}
-                value={formData[name]}
+                value={formData[name] || ""}
                 onChange={handleChange}
                 label={label}
-                variant="outlined"
-                size="medium"
                 type={type || "text"}
                 multiline={multiline}
                 rows={rows}
@@ -117,7 +135,7 @@ const ProfilePage = () => {
                   minHeight: multiline ? (rows || 1) * 24 : "auto",
                 }}
               >
-                {label} {user[name]}
+                {label} {user[name] || "N/A"}
               </Typography>
             )}
           </Box>
@@ -145,5 +163,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-
