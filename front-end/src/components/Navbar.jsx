@@ -13,16 +13,24 @@ import {
   Badge,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // 🧹 Remove token
+    setAnchorElUser(null);
+    navigate("/login"); // 🔁 Redirect to login
   };
 
   const unreadNotifications = 5;
@@ -58,11 +66,9 @@ const Navbar = () => {
             Upload
           </Button>
           <Button component={Link} to="/statistics" color="inherit" sx={{ textTransform: "none" }}>
-  Statistics 
-</Button>
-
+            Statistics
+          </Button>
         </Box>
-        
 
         {/* Icons on Right */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, ml: 3 }}>
@@ -90,7 +96,7 @@ const Navbar = () => {
             <MenuItem component={Link} to="/profile" onClick={handleCloseUserMenu}>
               Profile
             </MenuItem>
-            <MenuItem onClick={handleCloseUserMenu}>Logout</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem> {/* 🔑 Logout */}
           </Menu>
         </Box>
       </Toolbar>
