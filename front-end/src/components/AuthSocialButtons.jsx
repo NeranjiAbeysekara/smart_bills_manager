@@ -11,14 +11,26 @@ const AuthSocialButtons = ({ onGoogleClick }) => {
         variant="outlined"
         startIcon={<GoogleIcon />}
         fullWidth
-        onClick={onGoogleClick}
+        onClick={onGoogleClick} // 🔑 Calls passed handler for Google sign-in
       >
         Continue with Google
       </Button>
-      <Button variant="outlined" startIcon={<FacebookIcon />} fullWidth>
+
+      <Button
+        variant="outlined"
+        startIcon={<FacebookIcon />}
+        fullWidth
+        onClick={() => alert("Facebook login not implemented yet")}
+      >
         Continue with Facebook
       </Button>
-      <Button variant="outlined" startIcon={<AppleIcon />} fullWidth>
+
+      <Button
+        variant="outlined"
+        startIcon={<AppleIcon />}
+        fullWidth
+        onClick={() => alert("Apple login not implemented yet")}
+      >
         Continue with Apple
       </Button>
     </Stack>

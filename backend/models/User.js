@@ -15,7 +15,11 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: false // ⬅️ Made optional for social login
+  },
+  googleLogin: {
+    type: Boolean,
+    default: false // ⬅️ Optional flag for tracking Google users
   },
   phone: {
     type: String,
@@ -37,9 +41,9 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// 🔐 Hash password before saving
+// 🔐 Skip hashing if no password
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.password || !this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   next();
