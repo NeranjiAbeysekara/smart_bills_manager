@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import AuthSocialButtons from "../components/AuthSocialButtons";
+import { auth, provider, signInWithPopup } from "../firebase";
 
 const SignupPage = () => {
   const [name, setName] = useState("");
@@ -19,10 +20,26 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleGoogleSignup = () => {
-    alert("Google signup clicked — integrate Firebase or OAuth2 here.");
+  // 🟢 Handle Google signup
+  const handleGoogleSignup = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+
+      const res = await axios.post("http://localhost:5000/api/auth/google-login", {
+        idToken,
+      });
+
+      localStorage.setItem("token", res.data.token);
+      alert("Google signup successful 🎉");
+      navigate("/upload");
+    } catch (err) {
+      console.error("Google signup error:", err);
+      alert("Google signup failed ❌");
+    }
   };
 
+  // 🔐 Handle manual signup
   const handleSignup = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/signup", {
@@ -32,7 +49,6 @@ const SignupPage = () => {
       });
 
       const { token } = res.data;
-
       localStorage.setItem("token", token);
 
       alert("Registration successful! 🎉");
@@ -44,13 +60,7 @@ const SignupPage = () => {
   };
 
   return (
-    <Box
-      minHeight="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      bgcolor="#f0f2f5"
-    >
+    <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bgcolor="#f0f2f5">
       <Paper elevation={6} sx={{ p: 5, width: 400 }}>
         <Typography variant="h5" fontWeight="bold" mb={2} textAlign="center">
           Create an Account
