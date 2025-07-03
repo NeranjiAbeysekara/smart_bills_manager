@@ -11,7 +11,8 @@ export const uploadDocument = async (req, res) => {
       purchaseDate,
       warrantyPeriod,
       expiryDate,
-      documentType
+      documentType,
+      description 
     } = req.body;
 
     if (!req.file) {
@@ -30,6 +31,7 @@ export const uploadDocument = async (req, res) => {
       warrantyPeriod,
       expiryDate,
       documentType,
+      description,
       fileUrl: result.secure_url,
       publicId: result.public_id
     });
@@ -37,6 +39,7 @@ export const uploadDocument = async (req, res) => {
     await newDocument.save();
     res.status(201).json(newDocument);
   } catch (error) {
+    console.error("Upload error:", error);
     res.status(500).json({ message: 'Upload failed', error });
   }
 };

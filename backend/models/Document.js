@@ -36,6 +36,10 @@ const documentSchema = new mongoose.Schema({
   },
   publicId: {
     type: String // for Cloudinary
+  },
+  description: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

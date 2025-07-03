@@ -29,6 +29,10 @@ const UploadPage = () => {
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [warrantyPeriod, setWarrantyPeriod] = useState("");
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
@@ -45,17 +49,18 @@ const UploadPage = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("itemName", title);
-    formData.append("storeName", "N/A");
+    formData.append("storeName", storeName || "N/A");
     formData.append("purchaseDate", date);
-    formData.append("warrantyPeriod", 0);
-    formData.append("expiryDate", date);
+    formData.append("warrantyPeriod", warrantyPeriod || 0);
+    formData.append("expiryDate", expiryDate || date);
     formData.append("documentType", category);
+    formData.append("description", description);
 
     try {
       setUploading(true);
       setProgress(0);
 
-      const token = localStorage.getItem("token"); // ensure your token is stored after login
+      const token = localStorage.getItem("token");
       if (!token) return alert("Not authenticated! Please log in again.");
 
       const response = await axios.post(
@@ -81,6 +86,10 @@ const UploadPage = () => {
         setCategory("");
         setTitle("");
         setDate("");
+        setExpiryDate("");
+        setDescription("");
+        setStoreName("");
+        setWarrantyPeriod("");
       }
     } catch (error) {
       console.error("Upload failed:", error);
@@ -108,7 +117,6 @@ const UploadPage = () => {
             Upload Your Document 📤
           </Typography>
 
-          {/* Document Title */}
           <TextField
             fullWidth
             label="Document Title 📝"
@@ -118,7 +126,6 @@ const UploadPage = () => {
             sx={{ mb: 3 }}
           />
 
-          {/* Category Select */}
           <TextField
             select
             fullWidth
@@ -135,7 +142,6 @@ const UploadPage = () => {
             ))}
           </TextField>
 
-          {/* Date Picker */}
           <TextField
             fullWidth
             label="Document Date 📅"
@@ -146,7 +152,44 @@ const UploadPage = () => {
             sx={{ mb: 3 }}
           />
 
-          {/* File Upload */}
+          <TextField
+            fullWidth
+            label="Expiry Date (Optional) 📆"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Description 🧾"
+            multiline
+            minRows={2}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Add any relevant notes or info about the document"
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Store Name 🏪 (Optional)"
+            value={storeName}
+            onChange={(e) => setStoreName(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Warranty Period (Months) ⏳ (Optional)"
+            type="number"
+            value={warrantyPeriod}
+            onChange={(e) => setWarrantyPeriod(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
           <Button
             variant="outlined"
             component="label"
@@ -161,18 +204,13 @@ const UploadPage = () => {
             }}
           >
             Choose File
-            <Input
-              type="file"
-              onChange={handleFileChange}
-              sx={{ display: "none" }}
-            />
+            <Input type="file" onChange={handleFileChange} sx={{ display: "none" }} />
           </Button>
 
           <Typography variant="body1" color="text.secondary" mb={3}>
             {file ? file.name : "No file chosen yet..."}
           </Typography>
 
-          {/* Upload Button */}
           <Button
             variant="contained"
             color="primary"
@@ -183,7 +221,6 @@ const UploadPage = () => {
             {uploading ? "Uploading..." : "Upload"}
           </Button>
 
-          {/* Progress Bar */}
           {uploading && (
             <Box sx={{ width: "100%", mt: 4 }}>
               <LinearProgress
