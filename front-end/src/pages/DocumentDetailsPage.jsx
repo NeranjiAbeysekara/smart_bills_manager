@@ -11,17 +11,24 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const DocumentDetailsPage = () => {
-  const { id } = useParams(); // document ID from URL
+  const { id } = useParams();
   const [document, setDocument] = useState(null);
 
   useEffect(() => {
-    // Fetch document data by ID
     const fetchDocument = async () => {
       try {
-        const res = await axios.get(`/api/documents/${id}`);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Token not found. Please log in.");
+        }
+
+        const res = await axios.get(`http://localhost:5000/api/documents/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setDocument(res.data);
       } catch (err) {
         console.error("Error fetching document:", err);
+        alert("Failed to load document details.");
       }
     };
     fetchDocument();
@@ -36,12 +43,14 @@ const DocumentDetailsPage = () => {
           📄 Document Details
         </Typography>
         <Divider sx={{ mb: 2 }} />
+
         <Typography variant="body1"><strong>Item Name:</strong> {document.itemName}</Typography>
         <Typography variant="body1"><strong>Store Name:</strong> {document.storeName}</Typography>
         <Typography variant="body1"><strong>Purchase Date:</strong> {new Date(document.purchaseDate).toDateString()}</Typography>
         <Typography variant="body1"><strong>Warranty Period:</strong> {document.warrantyPeriod} months</Typography>
         <Typography variant="body1"><strong>Expiry Date:</strong> {new Date(document.expiryDate).toDateString()}</Typography>
         <Typography variant="body1"><strong>Document Type:</strong> {document.documentType}</Typography>
+        <Typography variant="body1"><strong>Description:</strong> {document.description}</Typography>
 
         <Box sx={{ mt: 3 }}>
           <Typography variant="h6">📎 File:</Typography>

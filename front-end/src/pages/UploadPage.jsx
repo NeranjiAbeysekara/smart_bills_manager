@@ -10,6 +10,7 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import axios from "axios";
 
 const categories = [
   "Warranty",
@@ -22,44 +23,80 @@ const categories = [
 ];
 
 const UploadPage = () => {
-  const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [description, setDescription] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [warrantyPeriod, setWarrantyPeriod] = useState("");
 
   const handleFileChange = (e) => {
     if (e.target.files.length > 0) {
-      setFileName(e.target.files[0].name);
+      setFile(e.target.files[0]);
     }
   };
 
-  const handleUpload = () => {
-    if (!fileName) return alert("Please select a file first! 📁");
+  const handleUpload = async () => {
+    if (!file) return alert("Please select a file first! 📁");
     if (!category) return alert("Please select a category! 📂");
     if (!title.trim()) return alert("Please enter a document title! 📝");
     if (!date) return alert("Please select the document date! 📅");
 
-    setUploading(true);
-    setProgress(0);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("itemName", title);
+    formData.append("storeName", storeName || "N/A");
+    formData.append("purchaseDate", date);
+    formData.append("warrantyPeriod", warrantyPeriod || 0);
+    formData.append("expiryDate", expiryDate || date);
+    formData.append("documentType", category);
+    formData.append("description", description);
 
-    // Fake upload progress simulation
-    const interval = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          clearInterval(interval);
-          setUploading(false);
-          setFileName("");
-          setCategory("");
-          setTitle("");
-          setDate("");
-          alert("Upload Successful! 🎉");
-          return 100;
+    try {
+      setUploading(true);
+      setProgress(0);
+
+      const token = localStorage.getItem("token");
+      if (!token) return alert("Not authenticated! Please log in again.");
+
+      const response = await axios.post(
+        "http://localhost:5000/api/documents/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percent);
+          },
         }
-        return Math.min(oldProgress + 10, 100);
-      });
-    }, 300);
+      );
+
+      if (response.status === 201) {
+        alert("Upload Successful! 🎉");
+        setFile(null);
+        setCategory("");
+        setTitle("");
+        setDate("");
+        setExpiryDate("");
+        setDescription("");
+        setStoreName("");
+        setWarrantyPeriod("");
+      }
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert("Upload failed. ❌");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -80,7 +117,6 @@ const UploadPage = () => {
             Upload Your Document 📤
           </Typography>
 
-          {/* Document Title */}
           <TextField
             fullWidth
             label="Document Title 📝"
@@ -90,7 +126,6 @@ const UploadPage = () => {
             sx={{ mb: 3 }}
           />
 
-          {/* Category Select */}
           <TextField
             select
             fullWidth
@@ -107,7 +142,6 @@ const UploadPage = () => {
             ))}
           </TextField>
 
-          {/* Date Picker */}
           <TextField
             fullWidth
             label="Document Date 📅"
@@ -118,7 +152,44 @@ const UploadPage = () => {
             sx={{ mb: 3 }}
           />
 
-          {/* File Upload */}
+          <TextField
+            fullWidth
+            label="Expiry Date (Optional) 📆"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            value={expiryDate}
+            onChange={(e) => setExpiryDate(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Description 🧾"
+            multiline
+            minRows={2}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Add any relevant notes or info about the document"
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Store Name 🏪 (Optional)"
+            value={storeName}
+            onChange={(e) => setStoreName(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            fullWidth
+            label="Warranty Period (Months) ⏳ (Optional)"
+            type="number"
+            value={warrantyPeriod}
+            onChange={(e) => setWarrantyPeriod(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
           <Button
             variant="outlined"
             component="label"
@@ -133,29 +204,23 @@ const UploadPage = () => {
             }}
           >
             Choose File
-            <Input
-              type="file"
-              onChange={handleFileChange}
-              sx={{ display: "none" }}
-            />
+            <Input type="file" onChange={handleFileChange} sx={{ display: "none" }} />
           </Button>
 
           <Typography variant="body1" color="text.secondary" mb={3}>
-            {fileName || "No file chosen yet..."}
+            {file ? file.name : "No file chosen yet..."}
           </Typography>
 
-          {/* Upload Button */}
           <Button
             variant="contained"
             color="primary"
-            disabled={!fileName || uploading}
+            disabled={!file || uploading}
             onClick={handleUpload}
             sx={{ px: 6, py: 1.8, fontWeight: 700 }}
           >
             {uploading ? "Uploading..." : "Upload"}
           </Button>
 
-          {/* Progress Bar */}
           {uploading && (
             <Box sx={{ width: "100%", mt: 4 }}>
               <LinearProgress
@@ -175,4 +240,3 @@ const UploadPage = () => {
 };
 
 export default UploadPage;
-
