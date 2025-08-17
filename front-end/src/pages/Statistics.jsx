@@ -33,7 +33,7 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658"];
 
 const Statistics = () => {
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: { xs: 2, sm: 4 } }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
         📊 Statistics Dashboard
       </Typography>
@@ -87,7 +87,7 @@ const Statistics = () => {
       </Box>
 
       {/* Pie Chart */}
-      <Box mt={6}>
+      <Box mt={6} mb={6}>
         <Typography variant="h6" gutterBottom>📊 Document Type Distribution</Typography>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -10,6 +10,8 @@ import {
   InputAdornment,
   Tooltip,
   Button,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -40,11 +42,22 @@ const dummyBills = [
 ];
 
 const BillsPage = () => {
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = useState("");
+  const [bills, setBills] = useState(dummyBills);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
 
-  const filteredBills = dummyBills.filter((bill) =>
+  const filteredBills = bills.filter((bill) =>
     bill.title.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleDelete = (id) => {
+    setBills((prev) => prev.filter((bill) => bill.id !== id));
+    setSnackbar({ open: true, message: "Bill deleted successfully", severity: "success" });
+  };
+
+  const handleDownload = (title) => {
+    setSnackbar({ open: true, message: `Downloading ${title}...`, severity: "info" });
+  };
 
   return (
     <Box p={4}>
@@ -52,6 +65,7 @@ const BillsPage = () => {
         My Bills
       </Typography>
 
+      {/* Search Bar */}
       <Box my={2}>
         <TextField
           label="Search bills"
@@ -69,11 +83,19 @@ const BillsPage = () => {
         />
       </Box>
 
+      {/* Bills Grid */}
       <Grid container spacing={3}>
         {filteredBills.length > 0 ? (
           filteredBills.map((bill) => (
-            <Grid item xs={12} md={6} lg={4} key={bill.id}>
-              <Card elevation={3}>
+            <Grid item xs={12} sm={6} md={4} key={bill.id}>
+              <Card
+                elevation={3}
+                sx={{
+                  borderRadius: 3,
+                  transition: "0.3s",
+                  "&:hover": { transform: "translateY(-4px)", boxShadow: 6 },
+                }}
+              >
                 <CardContent>
                   <Typography variant="h6" fontWeight="bold">
                     {bill.title}
@@ -88,14 +110,15 @@ const BillsPage = () => {
                     Provider: {bill.provider}
                   </Typography>
 
+                  {/* Actions */}
                   <Box display="flex" justifyContent="flex-end" mt={2} gap={1}>
                     <Tooltip title="Download">
-                      <IconButton color="primary">
+                      <IconButton color="primary" onClick={() => handleDownload(bill.title)}>
                         <DownloadIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-                      <IconButton color="error">
+                      <IconButton color="error" onClick={() => handleDelete(bill.id)}>
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -106,18 +129,37 @@ const BillsPage = () => {
           ))
         ) : (
           <Grid item xs={12}>
-            <Typography color="text.secondary" textAlign="center">
-              No bills found.
-            </Typography>
+            <Box textAlign="center" py={5}>
+              <Typography variant="h6" color="text.secondary">
+                📭 No bills found
+              </Typography>
+            </Box>
           </Grid>
         )}
       </Grid>
 
+      {/* Upload New Bill */}
       <Box textAlign="center" mt={4}>
         <Button variant="contained" color="secondary">
           Upload New Bill
         </Button>
       </Box>
+
+      {/* Snackbar Notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

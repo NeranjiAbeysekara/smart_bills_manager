@@ -16,27 +16,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DownloadIcon from "@mui/icons-material/Download";
 
 const dummyReceipts = [
-  {
-    id: 1,
-    title: "Grocery Store",
-    date: "2025-06-04",
-    total: "$45.30",
-    category: "Groceries",
-  },
-  {
-    id: 2,
-    title: "Electronics",
-    date: "2025-06-02",
-    total: "$299.99",
-    category: "Tech",
-  },
-  {
-    id: 3,
-    title: "Restaurant",
-    date: "2025-05-29",
-    total: "$23.75",
-    category: "Food",
-  },
+  { id: 1, title: "Grocery Store", date: "2025-06-04", total: "$45.30", category: "Groceries" },
+  { id: 2, title: "Electronics", date: "2025-06-02", total: "$299.99", category: "Tech" },
+  { id: 3, title: "Restaurant", date: "2025-05-29", total: "$23.75", category: "Food" },
 ];
 
 const ReceiptsPage = () => {
@@ -47,8 +29,8 @@ const ReceiptsPage = () => {
   );
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom color="#3949ab">
+    <Box p={{ xs: 2, sm: 4 }}>
+      <Typography variant="h4" fontWeight="bold" gutterBottom color="#3949ab" textAlign="center">
         My Receipts
       </Typography>
 
@@ -69,11 +51,11 @@ const ReceiptsPage = () => {
         />
       </Box>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {filteredReceipts.length > 0 ? (
           filteredReceipts.map((receipt) => (
-            <Grid item xs={12} md={6} lg={4} key={receipt.id}>
-              <Card elevation={3}>
+            <Grid item xs={12} sm={6} md={4} key={receipt.id}>
+              <Card elevation={3} sx={{ height: "100%" }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight="bold">
                     {receipt.title}
@@ -90,12 +72,12 @@ const ReceiptsPage = () => {
 
                   <Box display="flex" justifyContent="flex-end" mt={2} gap={1}>
                     <Tooltip title="Download">
-                      <IconButton color="primary">
+                      <IconButton color="primary" size="small">
                         <DownloadIcon />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-                      <IconButton color="error">
+                      <IconButton color="error" size="small">
                         <DeleteIcon />
                       </IconButton>
                     </Tooltip>
@@ -106,7 +88,7 @@ const ReceiptsPage = () => {
           ))
         ) : (
           <Grid item xs={12}>
-            <Typography color="text.secondary" textAlign="center">
+            <Typography color="text.secondary" textAlign="center" mt={4}>
               No receipts found.
             </Typography>
           </Grid>
@@ -114,7 +96,7 @@ const ReceiptsPage = () => {
       </Grid>
 
       <Box textAlign="center" mt={4}>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" size="large" sx={{ textTransform: "none" }}>
           Upload New Receipt
         </Button>
       </Box>
@@ -123,4 +105,3 @@ const ReceiptsPage = () => {
 };
 
 export default ReceiptsPage;
-

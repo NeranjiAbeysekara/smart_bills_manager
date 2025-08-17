@@ -10,7 +10,7 @@ const features = [
 ];
 
 const HomePage = () => {
-  const navigate = useNavigate(); // <-- add this
+  const navigate = useNavigate();
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f5f7fa", pt: 10, pb: 12 }}>
@@ -18,17 +18,34 @@ const HomePage = () => {
         {/* Hero Section */}
         <Grid container spacing={6} alignItems="center" justifyContent="center">
           <Grid item xs={12} md={6} textAlign="center">
-            <Typography variant="h3" fontWeight={700} color="#3949ab" gutterBottom>
+            <Typography
+              variant="h3"
+              fontWeight={700}
+              color="#3949ab"
+              gutterBottom
+              sx={{ fontSize: { xs: "2rem", md: "3rem" } }} // responsive font
+            >
               Smart Receipt Manager 📲
             </Typography>
-            <Typography variant="h6" color="text.secondary" mb={4}>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              mb={4}
+              sx={{ fontSize: { xs: "1rem", md: "1.25rem" } }}
+            >
               Organize, categorize, and manage your receipts easily and securely.
             </Typography>
             <Button
               variant="contained"
               size="large"
-              sx={{ backgroundColor: "#3949ab", px: 6, py: 1.8, fontWeight: 600 }}
-              onClick={() => navigate("/signup")} // <-- fixed navigation here
+              sx={{
+                backgroundColor: "#3949ab",
+                px: { xs: 4, md: 6 },
+                py: { xs: 1.5, md: 1.8 },
+                fontWeight: 600,
+                fontSize: { xs: "0.9rem", md: "1rem" },
+              }}
+              onClick={() => navigate("/signup")}
             >
               Get Started
             </Button>
@@ -43,6 +60,7 @@ const HomePage = () => {
             color="#3949ab"
             textAlign="center"
             gutterBottom
+            sx={{ fontSize: { xs: "1.8rem", md: "2.2rem" } }}
           >
             What You Can Do ✨
           </Typography>
@@ -60,13 +78,13 @@ const HomePage = () => {
                 <Paper
                   elevation={6}
                   sx={{
-                    width: 220,
-                    height: 220,
+                    width: { xs: "100%", sm: 250, md: 220 }, // responsive width
+                    minHeight: { xs: 180, md: 220 }, // flexible height
                     borderRadius: 4,
                     bgcolor: "white",
                     textAlign: "center",
-                    px: 3,
-                    py: 4,
+                    px: { xs: 2, md: 3 },
+                    py: { xs: 3, md: 4 },
                     cursor: "default",
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
                     "&:hover": {
@@ -78,7 +96,11 @@ const HomePage = () => {
                 >
                   <Typography
                     variant="h1"
-                    sx={{ fontSize: 60, mb: 2, userSelect: "none" }}
+                    sx={{
+                      fontSize: { xs: 40, md: 60 },
+                      mb: 2,
+                      userSelect: "none",
+                    }}
                   >
                     {emoji}
                   </Typography>
@@ -87,10 +109,15 @@ const HomePage = () => {
                     fontWeight={700}
                     color="#3949ab"
                     gutterBottom
+                    sx={{ fontSize: { xs: "1rem", md: "1.1rem" } }}
                   >
                     {title}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: 1, fontSize: { xs: "0.85rem", md: "0.9rem" } }}
+                  >
                     {desc}
                   </Typography>
                 </Paper>

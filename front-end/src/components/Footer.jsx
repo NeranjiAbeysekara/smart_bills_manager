@@ -12,7 +12,7 @@ const Footer = () => {
       sx={{
         bgcolor: "#3949ab",
         color: "white",
-        py: 6,
+        py: { xs: 4, md: 6 }, // smaller padding on mobile
         mt: 8,
       }}
     >
@@ -20,20 +20,41 @@ const Footer = () => {
         <Grid container spacing={4} justifyContent="space-between">
           {/* About Section */}
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+              textAlign={{ xs: "center", md: "left" }}
+            >
               Smart Receipt Manager
             </Typography>
-            <Typography variant="body2" sx={{ maxWidth: 320 }}>
-              Manage your receipts, warranties, and bills all in one place. Stay organized and stress-free!
+            <Typography
+              variant="body2"
+              sx={{ maxWidth: 320, mx: { xs: "auto", md: 0 }, textAlign: { xs: "center", md: "left" } }}
+            >
+              Manage your receipts, warranties, and bills all in one place. Stay
+              organized and stress-free!
             </Typography>
           </Grid>
 
           {/* Quick Links */}
-          <Grid item xs={6} md={2}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+              textAlign={{ xs: "center", sm: "left" }}
+            >
               Quick Links
             </Typography>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 1,
+                alignItems: { xs: "center", sm: "flex-start" },
+              }}
+            >
               <Link href="/" color="inherit" underline="hover">
                 Home
               </Link>
@@ -53,11 +74,16 @@ const Footer = () => {
           </Grid>
 
           {/* Social Media */}
-          <Grid item xs={6} md={3}>
-            <Typography variant="h6" fontWeight="bold" gutterBottom>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+              textAlign={{ xs: "center", sm: "left" }}
+            >
               Follow Us
             </Typography>
-            <Box>
+            <Box textAlign={{ xs: "center", sm: "left" }}>
               <IconButton
                 aria-label="facebook"
                 href="https://facebook.com"
@@ -98,8 +124,15 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        <Box textAlign="center" pt={4} fontSize={14} color="rgba(255,255,255,0.7)">
-          © {new Date().getFullYear()} Smart Receipt Manager. All rights reserved.
+        {/* Bottom Copyright */}
+        <Box
+          textAlign="center"
+          pt={4}
+          fontSize={14}
+          color="rgba(255,255,255,0.7)"
+        >
+          © {new Date().getFullYear()} Smart Receipt Manager. All rights
+          reserved.
         </Box>
       </Container>
     </Box>
@@ -107,7 +140,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
-
-

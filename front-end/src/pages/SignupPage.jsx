@@ -20,7 +20,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // 🟢 Handle Google signup
+  // Google signup
   const handleGoogleSignup = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -39,7 +39,7 @@ const SignupPage = () => {
     }
   };
 
-  // 🔐 Handle manual signup
+  // Manual signup
   const handleSignup = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/signup", {
@@ -48,9 +48,7 @@ const SignupPage = () => {
         password,
       });
 
-      const { token } = res.data;
-      localStorage.setItem("token", token);
-
+      localStorage.setItem("token", res.data.token);
       alert("Registration successful! 🎉");
       navigate("/upload");
     } catch (err) {
@@ -60,13 +58,34 @@ const SignupPage = () => {
   };
 
   return (
-    <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bgcolor="#f0f2f5">
-      <Paper elevation={6} sx={{ p: 5, width: 400 }}>
-        <Typography variant="h5" fontWeight="bold" mb={2} textAlign="center">
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      bgcolor="#f0f2f5"
+      p={{ xs: 2, sm: 0 }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          p: { xs: 3, sm: 5 },
+          width: "100%",
+          maxWidth: 400,
+          borderRadius: 3,
+        }}
+      >
+        <Typography
+          variant="h5"
+          fontWeight="bold"
+          mb={2}
+          textAlign="center"
+        >
           Create an Account
         </Typography>
 
         <AuthSocialButtons onGoogleClick={handleGoogleSignup} />
+
         <Divider sx={{ my: 3 }}>or</Divider>
 
         <TextField
@@ -96,7 +115,7 @@ const SignupPage = () => {
           variant="contained"
           color="primary"
           fullWidth
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, py: 1.8, textTransform: "none" }}
           onClick={handleSignup}
         >
           Sign Up
