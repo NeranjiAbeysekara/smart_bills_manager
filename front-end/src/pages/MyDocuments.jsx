@@ -1,7 +1,16 @@
 import React, { useState } from "react";
-import { Box, Typography, Grid, Paper, Dialog, DialogTitle, DialogContent } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  CircularProgress,
+} from "@mui/material";
 import axios from "axios";
-import { Link } from "react-router-dom"; // ✅ Import Link
+import { Link } from "react-router-dom";
 
 const categories = [
   { name: "Receipt", emoji: "🧾" },
@@ -19,9 +28,11 @@ const MyDocuments = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [documents, setDocuments] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchDocumentsByType = async (type) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const res = await axios.get(`http://localhost:5000/api/documents/type/${type}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -31,6 +42,8 @@ const MyDocuments = () => {
     } catch (err) {
       alert("Failed to fetch documents.");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,13 +67,20 @@ const MyDocuments = () => {
 
       <Grid container spacing={4} justifyContent="center" alignItems="center">
         {categories.map(({ name, emoji }) => (
-          <Grid item key={name} xs={12} sm={6} md={3} sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid
+            item
+            key={name}
+            xs={12}
+            sm={6}
+            md={3}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
             <Paper
               elevation={6}
               onClick={() => handleCategoryClick(name)}
               sx={{
-                width: 180,
-                height: 180,
+                width: { xs: "100%", sm: 200, md: 180 },
+                height: { xs: 140, sm: 180 },
                 borderRadius: 4,
                 bgcolor: "white",
                 textAlign: "center",
@@ -75,7 +95,7 @@ const MyDocuments = () => {
                 },
               }}
             >
-              <Typography variant="h1" sx={{ fontSize: 56, mb: 2 }}>
+              <Typography variant="h1" sx={{ fontSize: { xs: 42, sm: 56 }, mb: 2 }}>
                 {emoji}
               </Typography>
               <Typography variant="h6" fontWeight={600} color="#3949ab">
@@ -90,20 +110,37 @@ const MyDocuments = () => {
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>{selectedCategory} Documents</DialogTitle>
         <DialogContent dividers>
-          {documents.length > 0 ? (
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+              <CircularProgress color="primary" />
+            </Box>
+          ) : documents.length > 0 ? (
             documents.map((doc) => (
-              <Box key={doc._id} mb={2} p={2} border="1px solid #ddd" borderRadius={2}>
+              <Paper
+                key={doc._id}
+                elevation={2}
+                sx={{ p: 2, mb: 2, borderRadius: 2 }}
+              >
                 <Typography variant="subtitle1" fontWeight={600}>
                   {doc.itemName}
                 </Typography>
-                <Typography variant="body2">Date: {doc.purchaseDate}</Typography>
-                <Link to={`/documents/${doc._id}`} style={{ textDecoration: "none", color: "#3949ab" }}>
+                <Typography variant="body2" color="text.secondary">
+                  Date: {doc.purchaseDate}
+                </Typography>
+                <Link
+                  to={`/documents/${doc._id}`}
+                  style={{ textDecoration: "none", color: "#3949ab", fontWeight: 500 }}
+                >
                   🔍 View Details
                 </Link>
-              </Box>
+              </Paper>
             ))
           ) : (
-            <Typography>No documents found in this category.</Typography>
+            <Box textAlign="center" py={3}>
+              <Typography variant="h6" color="text.secondary">
+                😕 No documents found in this category.
+              </Typography>
+            </Box>
           )}
         </DialogContent>
       </Dialog>

@@ -106,9 +106,7 @@ const NotificationsPage = () => {
 
   const handleMarkAsRead = (id) => {
     setNotifications((prev) =>
-      prev.map((n) =>
-        n.id === id ? { ...n, read: true } : n
-      )
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
     );
   };
 
@@ -117,21 +115,19 @@ const NotificationsPage = () => {
   };
 
   const handleMarkAllRead = () => {
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, read: true }))
-    );
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h4" fontWeight={600} mb={3}>
+    <Box sx={{ p: { xs: 2, sm: 4 }, maxWidth: 800, mx: "auto" }}>
+      <Typography variant="h4" fontWeight={600} mb={3} textAlign="center">
         🔔 Notifications
       </Typography>
 
       <Button
         variant="outlined"
         onClick={handleMarkAllRead}
-        sx={{ mb: 3, textTransform: "none" }}
+        sx={{ mb: 3, textTransform: "none", width: "100%", maxWidth: 200, display: "block", mx: "auto" }}
       >
         Mark All as Read
       </Button>
@@ -142,12 +138,13 @@ const NotificationsPage = () => {
             <React.Fragment key={n.id}>
               <ListItem
                 secondaryAction={
-                  <>
+                  <Box sx={{ display: "flex", gap: 1 }}>
                     {!n.read && (
                       <IconButton
                         edge="end"
                         onClick={() => handleMarkAsRead(n.id)}
                         title="Mark as Read"
+                        size="large"
                       >
                         <MarkEmailReadIcon />
                       </IconButton>
@@ -156,46 +153,35 @@ const NotificationsPage = () => {
                       edge="end"
                       onClick={() => handleDelete(n.id)}
                       title="Delete"
+                      size="large"
                     >
                       <DeleteIcon />
                     </IconButton>
-                  </>
+                  </Box>
                 }
               >
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: "transparent" }}>
-                    {n.icon}
-                  </Avatar>
+                  <Avatar sx={{ bgcolor: "transparent" }}>{n.icon}</Avatar>
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography
-                      sx={{
-                        fontWeight: n.read ? "normal" : "bold",
-                      }}
-                    >
+                    <Typography sx={{ fontWeight: n.read ? "normal" : "bold" }}>
                       {n.title}
                     </Typography>
                   }
                   secondary={
                     <>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                      >
+                      <Typography variant="body2" color="text.secondary">
                         {n.message}
                       </Typography>
-                      <Typography
-                        variant="caption"
-                        color="text.disabled"
-                      >
+                      <Typography variant="caption" color="text.disabled">
                         {n.time}
                       </Typography>
                     </>
                   }
                 />
               </ListItem>
-              <Divider />
+              <Divider component="li" />
             </React.Fragment>
           ))}
 
@@ -211,5 +197,3 @@ const NotificationsPage = () => {
 };
 
 export default NotificationsPage;
-
-

@@ -6,6 +6,8 @@ import {
   TextField,
   Typography,
   Avatar,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 const EditProfile = () => {
@@ -16,6 +18,8 @@ const EditProfile = () => {
     avatarUrl: "https://i.pravatar.cc/300?img=47",
   });
 
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -24,13 +28,14 @@ const EditProfile = () => {
     e.preventDefault();
     console.log("Updated Profile:", formData);
     // Add logic here to save to backend
+    setOpenSnackbar(true);
   };
 
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: "#fffdf6", // Soft cream bg
+        backgroundColor: "#fffdf6",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -40,7 +45,7 @@ const EditProfile = () => {
       <Paper
         elevation={4}
         sx={{
-          p: 4,
+          p: { xs: 2, md: 4 },
           width: "100%",
           maxWidth: 600,
           borderRadius: 4,
@@ -66,6 +71,7 @@ const EditProfile = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
+            required
             label="Name"
             name="name"
             value={formData.name}
@@ -74,6 +80,8 @@ const EditProfile = () => {
           />
           <TextField
             fullWidth
+            required
+            type="email"
             label="Email"
             name="email"
             value={formData.email}
@@ -117,6 +125,22 @@ const EditProfile = () => {
             </Button>
           </Box>
         </form>
+
+        {/* Snackbar for feedback */}
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={() => setOpenSnackbar(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity="success"
+            variant="filled"
+          >
+            Profile updated successfully!
+          </Alert>
+        </Snackbar>
       </Paper>
     </Box>
   );
