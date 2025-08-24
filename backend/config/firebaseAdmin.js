@@ -1,11 +1,21 @@
 // backend/config/firebaseAdmin.js
-import admin from 'firebase-admin';
-import { readFileSync } from 'fs';
+import admin from "firebase-admin";
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(
-    readFileSync('./firebase-service-account.json', 'utf8')
-  ))
-});
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+  throw new Error("FIREBASE_SERVICE_ACCOUNT env variable is missing");
+}
+
+let serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+// Replace escaped newlines in the private key
+if (serviceAccount.private_key) {
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
+}
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 export default admin;
