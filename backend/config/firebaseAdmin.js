@@ -1,11 +1,9 @@
-// backend/config/firebaseAdmin.js
-import admin from 'firebase-admin';
-import { readFileSync } from 'fs';
-
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(
-    readFileSync('./firebase-service-account.json', 'utf8')
-  ))
-});
-
-export default admin;
+// backend/config/firebaseAdmin.js 
+// 
+import "dotenv/config"; 
+import admin from "firebase-admin"; 
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) 
+  { throw new Error("FIREBASE_SERVICE_ACCOUNT environment variable is missing"); } 
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT); 
+admin.initializeApp({ credential: admin.credential.cert(serviceAccount), });
+ export default admin;
