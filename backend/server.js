@@ -6,6 +6,8 @@ import connectDB from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import documentRoutes from './routes/documentRoutes.js'
+import notificationRoutes from './routes/notificationRoutes.js' 
+
 
 // initialize express app
 const app = express()
@@ -24,6 +26,7 @@ app.use(express.json())
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/documents', documentRoutes)
+
 app.get('/', (req, res) => 
   res.send('Welcome to the backend server!'))
 

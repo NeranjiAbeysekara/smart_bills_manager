@@ -1,7 +1,7 @@
 // frontend/pages/SignupPage.jsx
 import React, { useState } from "react";
 import {
-  Box,
+  Box, 
   Button,
   TextField,
   Typography,
